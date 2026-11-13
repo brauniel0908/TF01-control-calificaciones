@@ -1,92 +1,19 @@
-\# TF01 · Control de calificaciones
+# Casos de prueba manuales · TF01 Control de calificaciones
 
+Autor: Braunier Isaias Vilorio Mariano · Matrícula 100816767
 
-
-\*\*Universidad:\*\* Universidad Autónoma de Santo Domingo (UASD)
-
-\*\*Asignatura:\*\* INF-5110 · Laboratorio de Introducción a la Programación
-
-\*\*Autor:\*\* Braunier Isaias Vilorio Mariano · Matrícula 100816767
-
-
-
-\## Descripción
-
-Aplicación de consola en C++ para llevar el control de calificaciones de estudiantes. Permite registrar estudiantes y sus notas por asignatura, calcular promedios, buscar por matrícula, clasificar aprobados y reprobados y mostrar el mayor y el menor promedio. Los datos se guardan automáticamente en un archivo CSV y se cargan al iniciar el programa.
-
-
-
-\## Funcionalidades
-
-1\. Registrar estudiante (matrícula de 9 dígitos y nombre).
-
-2\. Registrar calificación (asignatura y nota de 0 a 100).
-
-3\. Calcular el promedio de un estudiante.
-
-4\. Buscar estudiante por matrícula.
-
-5\. Listar aprobados y reprobados (aprueba con promedio mayor o igual a 70).
-
-6\. Mostrar el mayor y el menor promedio.
-
-7\. Listar todos los estudiantes.
-
-0\. Salir (guarda los datos).
-
-
-
-\## Compilación y ejecución
-
-Requiere un compilador C++11 o superior (g++).
-
-
-
-&#x20;   g++ -std=c++11 -Wall -Wextra main.cpp -o control
-
-&#x20;   .\\control.exe
-
-
-
-El archivo estudiantes.csv se crea o se lee en la carpeta desde donde se ejecuta el programa.
-
-
-
-\## Estructura de los datos
-
-&#x20;   struct Calificacion { string asignatura; double nota; };
-
-&#x20;   struct Estudiante   { string matricula; string nombre; vector<Calificacion> calificaciones; };
-
-&#x20;   vector<Estudiante> estudiantes;
-
-
-
-Formato del CSV (una fila por calificación; un estudiante sin notas se guarda con asignatura y nota vacías):
-
-
-
-&#x20;   matricula,nombre,asignatura,nota
-
-&#x20;   123456789,juan santana perez,programacion,95
-
-
-
-\## Validaciones
-
-\- Matrícula de exactamente 9 dígitos numéricos y no repetida.
-
-\- Nombre y asignatura obligatorios y sin comas.
-
-\- Nota numérica entre 0 y 100.
-
-\- No repetir la misma asignatura para un estudiante.
-
-\- Opción de menú válida y estudiante existente al registrar notas.
-
-
-
-\## Resumen de pruebas
-
-El detalle está en PRUEBAS.md. Se probaron casos válidos (registro, notas, búsqueda, promedio, aprobados y reprobados, mayor y menor) e inválidos (nota fuera de rango, texto en lugar de número, matrícula inexistente), además de la persistencia en el archivo CSV.
-
+| # | Tipo | Pasos (entrada) | Resultado esperado | Resultado obtenido |
+|---|------|-----------------|--------------------|--------------------|
+| 1 | Válido | Opción 1: matrícula 123456789, nombre juan santana perez | Estudiante registrado y guardado | Registrado y guardado en estudiantes.csv |
+| 2 | Límite | Opción 2 o 3 con el estudiante recién creado (sin notas) | Aviso de que no tiene calificaciones | El programa avisó que no tiene calificaciones |
+| 3 | Válido | Opción 2: matrícula 123456789, asignatura programacion, nota 95 | Calificación registrada y guardada | Registrada; el CSV muestra la asignatura y la nota 95 |
+| 4 | Válido | Registrar a 123456788 (jose perez rodriguez) con matematica y nota 60 | Estudiante y nota registrados | Registrados |
+| 5 | Válido (búsqueda) | Opción 4: matrícula 123456788 | Datos, nota, promedio 60.00 y REPROBADO | Mostró nombre, matematica 60.00, promedio 60.00 -> REPROBADO |
+| 6 | Válido (cálculo) | Opción 3: matrícula 123456788 | Promedio 60.00 | Promedio de jose perez rodriguez: 60.00 (1 asignatura(s)) |
+| 7 | Válido | Opción 5 (aprobados y reprobados) | Juan aprobado (95.00), José reprobado (60.00) | 1 aprobado (juan, 95.00) y 1 reprobado (jose, 60.00) |
+| 8 | Válido | Opción 6 (mayor y menor promedio) | Mayor 95.00 (Juan), menor 60.00 (José) | Mayor 95.00 (juan santana perez), menor 60.00 (jose perez rodriguez) |
+| 9 | Inválido | Opción 2: matrícula 123456789, nota 150, luego abc | Rechaza ambas y vuelve a pedir la nota | Mostró "ingrese un numero entre 0.00 y 100.00" en ambos casos y siguió pidiendo la nota |
+| 10 | Inválido | Opción 2: matrícula 999999999 (no existe) | Error: no existe un estudiante con esa matrícula | Mostró el error y no pidió asignatura ni nota |
+| 11 | Inválido | Opción 1: matrícula 12345 | Error: debe tener 9 dígitos | Mostró "Error: la matricula debe tener exactamente 9 digitos numericos." y volvió a pedir la matrícula |
+| 12 | Inválido | Opción 1: matrícula repetida 123456789 | Error: ya existe un estudiante con esa matrícula | Mostró "Error: ya existe un estudiante con esa matricula." y volvió al menú |
+| 13 | Persistencia | Opción 0, abrir de nuevo el programa y usar la opción 7 | Se cargan los estudiantes y sus notas desde estudiantes.csv | Al reabrir mostró "Datos cargados: 2 estudiante(s), 2 fila(s) leida(s)" y la opción 7 listó a juan santana perez (95.00) y a jose perez rodriguez (60.00) con sus notas |
